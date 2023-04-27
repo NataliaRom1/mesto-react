@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import api from '../utils/Api';
+import React, { useState } from 'react';
+import api from '../utils/api';
 import Card from './Card';
 
 function Main(props) {
@@ -21,7 +21,6 @@ function Main(props) {
     },[])
 
   return (
-    <>
       <main className="main">
       <section className="profile">
         <button className="profile__btn-edit-avatar button" type="button" onClick={props.onEditAvatar}>
@@ -41,7 +40,6 @@ function Main(props) {
         ))}
         </section>
       </main>
-    </>
   )
 }
 

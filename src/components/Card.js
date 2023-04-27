@@ -7,7 +7,6 @@ function Card(props) {
   }
 
   return (
-    <>
         <article className="element">
           <button className="element__trash-img" type="button"></button>
         <img className="element__img" src={props.card.link} alt={props.card.name} style={{ backgroundImage: `url(${props.card.link})`}} onClick={handleClick}/>
@@ -19,7 +18,6 @@ function Card(props) {
               </div>
             </div>
         </article>
-    </>
   )
 }
 
