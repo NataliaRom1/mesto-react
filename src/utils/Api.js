@@ -60,7 +60,17 @@ class Api {
     })
   }
 
-  // Постановка лайка
+  //Добавление и удаление лайка карточки
+  toggleLike(cardId, isLiked) {
+    const method = isLiked ? 'PUT' : 'DELETE';
+
+    return this._request(`${this._url}/cards/${cardId}/likes`, {
+      method,
+      headers: this._headers
+    })
+  }
+
+  // Постановка лайка (Отдельно)
   addLike(cardId) {
     return this._request(`${this._url}/cards/${cardId}/likes`, {
       method: 'PUT',
@@ -68,7 +78,7 @@ class Api {
     })
   }
 
-  // Cнятие лайка
+  // Cнятие лайка (Отдельно)
   removeLike(cardId) {
     return this._request(`${this._url}/cards/${cardId}/likes`, {
       method: 'DELETE',
