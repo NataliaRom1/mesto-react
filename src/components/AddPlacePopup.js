@@ -55,11 +55,11 @@ function AddPlacePopup(props) {
       setName('');
       setLink('');
       setFormValid(false);
-    } else if (props.onClose) {
+    } else {
       setNameError('');
       setLinkError('');
     }
-  }, [props.isOpen]);
+  }, [props.isOpen, props.onClose]);
 
   React.useEffect(() => {
     if ((nameError || linkError)) {

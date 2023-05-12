@@ -2,7 +2,6 @@ import React from 'react';
 
 // «Редактировать профиль», «Новое место», «Обновить аватар», «Вы уверены ?»
 function PopupWithForm(props) {
-  console.log(props.buttonStatus)
   return (
     <div className={`popup popup_type_${props.name} ${props.isOpen && 'popup_opened'}`}>
       <div className={`popup__container ${(props.name == 'update-avatar' || props.name == 'delete') && `popup-${props.name}__container`}`}>

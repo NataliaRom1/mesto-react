@@ -5,6 +5,23 @@ import PopupWithForm from './PopupWithForm';
 function EditAvatarPopup(props) {
   const avatarRef = React.useRef(); // записываем объект, возвращаемый хуком, в переменную
 
+  const [linkDirty, setLinkDirty] = React.useState(false);
+  const [linkError, setLinkError] = React.useState('');
+  const [formValid, setFormValid] = React.useState(true);
+
+  function linkValidation(e) {
+    setLinkDirty(true);
+    const regExp = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9\-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-\/])*)?/;
+
+    if (e.target.value.length == 0) {
+      setLinkError('Вы пропустили это поле')
+    } else if (!regExp.test(String(e.target.value))) {
+      setLinkError('Введите адрес сайта')
+    } else {
+      setLinkError('')
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();   // Запрещаем браузеру переходить по адресу формы
 
@@ -15,8 +32,24 @@ function EditAvatarPopup(props) {
 
   // Очищение инпута
   React.useEffect(() => {
-    avatarRef.current.value = "";
-  }, [props.isOpen]);
+    if (props.isOpen) {
+      avatarRef.current.value = "";
+      setFormValid(false);
+    }
+     else {
+      setLinkError('');
+    }
+  }, [props.isOpen, props.onClose]);
+
+
+  React.useEffect(() => {
+    if ((linkError)) {
+      setFormValid(false)
+    } else {
+      setFormValid(true)
+    }
+  }, [linkError])
+  console.log(formValid)
 
   return (
     <PopupWithForm
@@ -25,20 +58,20 @@ function EditAvatarPopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
-      buttonText="Сохранить">
+      buttonText="Сохранить"
+      buttonStatus={formValid}>
 
       <input
         ref={avatarRef}
+        onChange={linkValidation}
         type="url"
         className="popup__input popup__input_type_avatar-link"
         name="avatar-link"
         placeholder="Ссылка на фото"
         required
         id="avatar-link-input" />
-      <span
-        className="form__input-error"
-        id="avatar-link-input-error">
-      </span>
+      {(linkDirty && linkError) && <span className="form__input-error popup__error_visible" id="avatar-link-input-error">{linkError}</span>}
+
     </PopupWithForm>
   )
 }
