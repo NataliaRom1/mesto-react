@@ -39,7 +39,7 @@ function EditAvatarPopup(props) {
      else {
       setLinkError('');
     }
-  }, [props.isOpen, props.onClose]);
+  }, [props.isOpen]);
 
 
   React.useEffect(() => {

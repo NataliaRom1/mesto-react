@@ -59,7 +59,7 @@ function AddPlacePopup(props) {
       setNameError('');
       setLinkError('');
     }
-  }, [props.isOpen, props.onClose]);
+  }, [props.isOpen]);
 
   React.useEffect(() => {
     if ((nameError || linkError)) {
