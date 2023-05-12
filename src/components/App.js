@@ -21,6 +21,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  // const [errors, setErrors] = React.useState("");
 
   // Обработчик клика для попап редактирования
   function handleEditProfileClick() {

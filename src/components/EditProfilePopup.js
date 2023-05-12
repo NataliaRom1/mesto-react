@@ -9,13 +9,48 @@ function EditProfilePopup(props) {
 
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
+  const [nameDirty, setNameDirty] = React.useState(false);
+  const [descriptionDirty, setDescriptionDirty] = React.useState(false);
+  const [nameError, setNameError] = React.useState('');
+  const [descriptionError, setDescriptionError] = React.useState('');
+  const [formValid, setFormValid] = React.useState(true);
 
   function handleNameChange(e) {
     setName(e.target.value);
+    nameValidation(e);
   }
 
   function handleDescriptionChange(e) {
     setDescription(e.target.value);
+    descriptionValidation(e);
+  }
+
+  function nameValidation(e) {
+    setNameDirty(true);
+    if (e.target.value.length == 0) {
+      setNameError('Вы пропустили это поле')
+    } else if (e.target.value.length < 2) {
+      setNameError(`Минимальное количество символов 2. Длина текста сейчас: ${e.target.value.length}`)
+    } else if (e.target.value.length > 40) {
+      setNameError(`Максимальное количество символов 40. Длина текста сейчас: ${e.target.value.length}`)
+    }
+    else {
+      setNameError('')
+    }
+  }
+
+  function descriptionValidation(e) {
+    setDescriptionDirty(true);
+    if (e.target.value.length == 0) {
+      setDescriptionError('Вы пропустили это поле')
+    } else if (e.target.value.length < 2) {
+      setDescriptionError(`Минимальное количество символов 2. Длина текста сейчас: ${e.target.value.length}`)
+    } else if (e.target.value.length > 200) {
+      setDescriptionError(`Максимальное количество символов 40. Длина текста сейчас: ${e.target.value.length}`)
+    }
+    else {
+      setDescriptionError('')
+    }
   }
 
   // После загрузки текущего пользователя из API
@@ -24,8 +59,21 @@ function EditProfilePopup(props) {
     if (props.isOpen) {
       setName(currentUser.name);
       setDescription(currentUser.about);
+      setFormValid(true);
     }
-  }, [props.isOpen, currentUser]);
+    else if (props.onClose) {
+      setNameError('');
+      setDescriptionError('');
+    }
+  }, [props.isOpen, currentUser])
+
+  React.useEffect(() => {
+    if ((nameError || descriptionError)) {
+      setFormValid(false)
+    } else {
+      setFormValid(true)
+    }
+  }, [nameError, descriptionError])
 
   function handleSubmit(e) {
     e.preventDefault();     // Запрещаем браузеру переходить по адресу формы
@@ -44,7 +92,8 @@ function EditProfilePopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
-      buttonText="Сохранить">
+      buttonText="Сохранить"
+      buttonStatus={formValid}>
 
       <input
         value={name}
@@ -53,14 +102,11 @@ function EditProfilePopup(props) {
         className="popup__input popup__input_type_name"
         name="name"
         placeholder="Ваше имя"
-        required
         id="name-input"
-        minLength="2"
-        maxLength="20" />
-      <span
-        className="form__input-error"
-        id="name-input-error">
-      </span>
+        required
+      />
+      {(nameDirty && nameError) && <span className="form__input-error popup__error_visible" id="name-input-error">{nameError}</span>}
+
       <input
         value={description}
         onChange={handleDescriptionChange}
@@ -68,14 +114,10 @@ function EditProfilePopup(props) {
         className="popup__input popup__input_type_description"
         name="info"
         placeholder="Расскажите о себе"
-        required
         id="description-input"
-        minLength="2"
-        maxLength="200" />
-      <span
-        className="form__input-error"
-        id="description-input-error">
-      </span>
+        required
+      />
+      {(descriptionDirty && descriptionError) && <span className="form__input-error popup__error_visible" id="description-input-error">{descriptionError}</span>}
     </PopupWithForm >
   )
 }
